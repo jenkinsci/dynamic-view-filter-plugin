@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>5.28</version>
+    <version>6.2152.ve00a_731c3ce9</version>
     <relativePath/>
   </parent>
 
@@ -25,13 +25,6 @@
     </license>
   </licenses>
 
-  <developers>
-    <developer>
-      <id>adityajalkhare</id>
-      <name>Aditya Jalkhare</name>
-    </developer>
-  </developers>
-
   <scm>
     <connection>scm:git:https://github.com/jenkinsci/dynamic-view-filter-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/dynamic-view-filter-plugin.git</developerConnection>
@@ -40,11 +33,13 @@
   </scm>
 
   <properties>
-    <jenkins.baseline>2.479</jenkins.baseline>
+    <jenkins.baseline>2.528</jenkins.baseline>
     <jenkins.version>${jenkins.baseline}.3</jenkins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <changelist>999999-SNAPSHOT</changelist>
     <scmTag>HEAD</scmTag>
+    <hpi.strictBundledArtifacts>true</hpi.strictBundledArtifacts>
+    <ban-commons-lang-2.skip>false</ban-commons-lang-2.skip>
   </properties>
 
   <dependencyManagement>
@@ -52,7 +47,7 @@
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-${jenkins.baseline}.x</artifactId>
-        <version>5054.v620b_5d2b_d5e6</version>
+        <version>6269.v7a_159d68a_366</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -63,7 +58,6 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>view-job-filters</artifactId>
-      <version>406.va_0ec67147ee2</version>
     </dependency>
 
     <dependency>
