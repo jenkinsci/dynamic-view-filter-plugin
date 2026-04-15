@@ -1,38 +1,75 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
-  <!-- Dropdown filter bar -->
-  <j:if test="${!empty(it.dropdowns)}">
-    <div style="background: var(--section-header-bg-color, #f8f8f8); padding: 10px 14px; margin-bottom: 15px; border-radius: 6px; border: 1px solid var(--input-border, #ccc);">
-      <form method="GET" action="">
-        <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
-          <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
-            <div>
-              <label style="font-weight: bold; margin-right: 4px;">${dd.label}:</label>
-              <div class="jenkins-select" style="display: inline-block;">
-                <select name="dd_${loop.index}" class="jenkins-select__input"
-                        onchange="this.form.submit()">
-                  <option value="">-- All --</option>
-                  <j:forEach var="val" items="${it.getDropdownValues(dd)}">
-                    <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
-                    <j:choose>
-                      <j:when test="${isSelected}">
-                        <option value="${val}" selected="selected">${val}</option>
-                      </j:when>
-                      <j:otherwise>
-                        <option value="${val}">${val}</option>
-                      </j:otherwise>
-                    </j:choose>
-                  </j:forEach>
-                </select>
-              </div>
-            </div>
-          </j:forEach>
-          <a href="?" class="jenkins-button" style="text-decoration: none;">Clear All</a>
-        </div>
-      </form>
-    </div>
-  </j:if>
-
-  <!-- Standard View content (project table, etc.) -->
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+  <!-- Standard View content (tab bar, project table, etc.) -->
   <st:include page="main.jelly" class="hudson.model.View"/>
+
+  <!-- Dropdown filter bar (positioned after tab bar via script) -->
+  <j:if test="${!empty(it.dropdowns)}">
+    <div id="dynamic-view-filter-bar" style="display: none; margin-bottom: 16px;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+        <button type="button" class="jenkins-button jenkins-button--tertiary"
+                id="dvf-toggle"
+                style="padding: 4px 10px; font-size: var(--font-size-xs);"
+                onclick="var c=document.getElementById('dvf-content'); var d=this.querySelector('.dvf-chevron-down'); var r=this.querySelector('.dvf-chevron-right'); if(c.style.display==='none'){c.style.display='';d.style.display='';r.style.display='none';localStorage.setItem('dvf-collapsed','false');}else{c.style.display='none';d.style.display='none';r.style.display='';localStorage.setItem('dvf-collapsed','true');}">
+          <l:icon src="symbol-funnel-outline plugin-ionicons-api" class="icon-sm"/>
+          <span class="dvf-chevron-down"><l:icon src="symbol-chevron-down-outline plugin-ionicons-api" class="icon-sm"/></span>
+          <span class="dvf-chevron-right" style="display: none;"><l:icon src="symbol-chevron-forward-outline plugin-ionicons-api" class="icon-sm"/></span>
+          Filters
+        </button>
+      </div>
+      <div id="dvf-content">
+        <form id="dvf-form" method="GET" action="">
+          <div style="display: flex; gap: 20px; align-items: flex-end; justify-content: flex-start; flex-wrap: wrap;">
+            <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
+              <div style="min-width: 120px; flex: 0 1 auto;">
+                <label class="jenkins-form-label" style="margin-bottom: 4px; color: var(--text-color-secondary);">${dd.label}</label>
+                <div class="jenkins-select">
+                  <select name="dd_${loop.index}" class="jenkins-select__input"
+                          style="padding-right: 30px; text-align: center;"
+                          onchange="this.form.submit()">
+                    <option value="">-- All --</option>
+                    <j:forEach var="val" items="${it.getDropdownValues(dd)}">
+                      <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
+                      <j:choose>
+                        <j:when test="${isSelected}">
+                          <option value="${val}" selected="selected">${val}</option>
+                        </j:when>
+                        <j:otherwise>
+                          <option value="${val}">${val}</option>
+                        </j:otherwise>
+                      </j:choose>
+                    </j:forEach>
+                  </select>
+                </div>
+              </div>
+            </j:forEach>
+            <button type="button" class="jenkins-button jenkins-!-destructive-color"
+                    style="align-self: flex-end; padding: 4px 10px; font-size: var(--font-size-xs);"
+                    onclick="var f=document.getElementById('dvf-form'); var s=f.querySelectorAll('select'); for(var i=0;i&lt;s.length;i++){s[i].selectedIndex=0;} f.submit();">
+              <l:icon src="symbol-trash" class="icon-sm"/> Clear All
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      (function() {
+        var bar = document.getElementById('dynamic-view-filter-bar');
+        if (!bar) return;
+        var tabBar = document.querySelector('.tabBar') || document.querySelector('.jenkins-tab-bar');
+        if (tabBar &amp;&amp; tabBar.parentNode) {
+          tabBar.parentNode.insertBefore(bar, tabBar.nextSibling);
+        }
+        bar.style.display = '';
+        if (localStorage.getItem('dvf-collapsed') === 'true') {
+          var c = document.getElementById('dvf-content');
+          var d = document.querySelector('#dvf-toggle .dvf-chevron-down');
+          var r = document.querySelector('#dvf-toggle .dvf-chevron-right');
+          if (c) c.style.display = 'none';
+          if (d) d.style.display = 'none';
+          if (r) r.style.display = '';
+        }
+      })();
+    </script>
+  </j:if>
 </j:jelly>

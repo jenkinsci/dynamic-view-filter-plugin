@@ -2,6 +2,7 @@ package io.jenkins.plugins.dynamic_view_filter;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
+import hudson.model.Job;
 import hudson.model.ListView;
 import hudson.model.Run;
 import hudson.model.TopLevelItem;
@@ -60,11 +61,21 @@ public class DropdownFilterView extends ListView {
     @Override
     public List<TopLevelItem> getItems() {
         List<TopLevelItem> items = super.getItems();
+        List<DropdownDefinition> dds = getDropdowns();
+        // Exclude non-Job items (e.g. Folders) that render as empty rows
+        if (!dds.isEmpty()) {
+            List<TopLevelItem> jobItems = new ArrayList<>();
+            for (TopLevelItem item : items) {
+                if (item instanceof Job) {
+                    jobItems.add(item);
+                }
+            }
+            items = jobItems;
+        }
         Map<Integer, String> selections = getSelectionsFromRequest();
         if (selections.isEmpty()) {
             return items;
         }
-        List<DropdownDefinition> dds = getDropdowns();
         List<TopLevelItem> filtered = new ArrayList<>();
         for (TopLevelItem item : items) {
             boolean match = true;

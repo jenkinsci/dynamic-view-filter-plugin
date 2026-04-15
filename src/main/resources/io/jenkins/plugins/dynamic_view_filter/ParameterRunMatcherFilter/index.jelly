@@ -1,0 +1,6 @@
+<?jelly escape-by-default='true'?>
+<div>
+  A view-level job filter that matches builds by parameter name, value, and
+  description regex. Works with DynamicBuildFilterColumn to filter displayed
+  build data across all wrapped columns in the view.
+</div>

@@ -17,6 +17,46 @@ This plugin lets you:
 
 In short: **dynamic dropdowns that filter both your job list and the build data shown in columns, with zero manual maintenance.**
 
+## Screenshots
+
+### Dropdown Filter View
+
+Auto-populated dropdown menus at the top of the view for filtering jobs instantly.
+
+![Dropdown Filter View](docs/images/dropdown-filter-view.png)
+
+### Dropdown Filter Configuration
+
+#### Job Name Regex Source
+
+Extract dropdown values from job folder paths using a regex capture group.
+
+![Job Name Regex Filter](docs/images/dropdown-view-job-name-regex-filter.png)
+
+#### Build Parameter Source
+
+Populate dropdown values from actual build parameter values.
+
+![Build Parameter Filter](docs/images/dropdown-view-build-parameter-filter.png)
+
+### Dynamic Build Filter Column
+
+Wraps a standard column (Status, Weather, etc.) and filters build data through the view's job filters.
+
+![Dynamic Build Filter Column](docs/images/dynamic-build-filter-column.png)
+
+### Parameter Build Filter Column
+
+Self-contained column that filters builds by parameter name and value regex, with delegate column selection.
+
+![Parameter Build Filter Column](docs/images/parameter-build-filter-column.png)
+
+### Parameter Run Matcher Filter
+
+View-level job filter for matching builds by parameter name, value, and description regex.
+
+![Parameter Run Matcher Filter](docs/images/parameter-run-matcher-filter.png)
+
 ## Background
 
 The [View Job Filters](https://plugins.jenkins.io/view-job-filters/) plugin provides `BuildFilterColumn` for filtering build data in list view columns. However, it relies on stored XStream back-references and runtime proxying that can break with Pipeline jobs and Job DSL configurations.
