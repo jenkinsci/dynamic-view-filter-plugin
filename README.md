@@ -102,8 +102,8 @@ The **Include jobs by regex** field and the **Job Name Regex** dropdown source w
 
 | Field | Purpose | Example |
 |---|---|---|
-| **Include jobs by regex** (view config) | Controls which jobs the view can see at all | `tx-generator/wallets/.*/.*/.*/.*` |
-| **Job Name Regex** (dropdown source) | Extracts a capture group value for the dropdown | `tx-generator/wallets/([^/]+)/.*` |
+| **Include jobs by regex** (view config) | Controls which jobs the view can see at all | `projects/.*` |
+| **Job Name Regex** (dropdown source) | Extracts a capture group value for the dropdown | `projects/([^/]+)/.*` |
 
 The include regex must be broad enough to cover all jobs you want the dropdowns to filter. The dropdown regex then extracts specific segments as dropdown values.
 
