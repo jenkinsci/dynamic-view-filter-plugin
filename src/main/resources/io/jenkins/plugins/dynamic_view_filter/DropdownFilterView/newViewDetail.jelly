@@ -1,0 +1,8 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core">
+  <div>
+    Shows items in a list format with configurable dropdown filters at the top.
+    Dropdowns auto-populate from job names or build parameters, letting you
+    dynamically narrow which jobs and build data are displayed.
+  </div>
+</j:jelly>

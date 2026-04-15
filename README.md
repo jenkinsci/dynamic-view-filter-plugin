@@ -17,6 +17,46 @@ This plugin lets you:
 
 In short: **dynamic dropdowns that filter both your job list and the build data shown in columns, with zero manual maintenance.**
 
+## Screenshots
+
+### Dropdown Filter View
+
+Auto-populated dropdown menus at the top of the view for filtering jobs instantly.
+
+![Dropdown Filter View](docs/images/dropdown-filter-view.png)
+
+### Dropdown Filter Configuration
+
+#### Job Name Regex Source
+
+Extract dropdown values from job folder paths using a regex capture group.
+
+![Job Name Regex Filter](docs/images/dropdown-view-job-name-regex-filter.png)
+
+#### Build Parameter Source
+
+Populate dropdown values from actual build parameter values.
+
+![Build Parameter Filter](docs/images/dropdown-view-build-parameter-filter.png)
+
+### Dynamic Build Filter Column
+
+Wraps a standard column (Status, Weather, etc.) and filters build data through the view's job filters.
+
+![Dynamic Build Filter Column](docs/images/dynamic-build-filter-column.png)
+
+### Parameter Build Filter Column
+
+Self-contained column that filters builds by parameter name and value regex, with delegate column selection.
+
+![Parameter Build Filter Column](docs/images/parameter-build-filter-column.png)
+
+### Parameter Run Matcher Filter
+
+View-level job filter for matching builds by parameter name, value, and description regex.
+
+![Parameter Run Matcher Filter](docs/images/parameter-run-matcher-filter.png)
+
 ## Background
 
 The [View Job Filters](https://plugins.jenkins.io/view-job-filters/) plugin provides `BuildFilterColumn` for filtering build data in list view columns. However, it relies on stored XStream back-references and runtime proxying that can break with Pipeline jobs and Job DSL configurations.
@@ -44,6 +84,28 @@ Two source types:
 Multiple dropdowns combine with AND logic. All standard ListView features (columns, job filters, regex include) are preserved.
 
 > **Important:** The Dropdown Filter View is a ListView — it only sees jobs that match the view's **Include jobs by regex** field. You must configure a regex pattern (e.g., `.*`) and enable **Recurse in subfolders** in the view configuration for the dropdowns to discover and filter jobs. The dropdown regex/parameter filters narrow down from this base set.
+
+#### Filter Bar Behavior
+
+- **Collapsible:** Click the **Filters** toggle to collapse or expand the filter bar. The state is persisted in `localStorage` — it remembers your preference across page loads.
+- **Auto-submit:** Selecting a value in any dropdown immediately applies the filter (no submit button needed).
+- **Clear All:** Resets all dropdowns to "-- All --" and resubmits, without a full page reload.
+- **Only actual jobs shown:** Folder items are automatically excluded from the job table — only `Job` items (Pipeline, FreeStyle, Matrix, etc.) appear in the filtered results.
+
+Here is an example with the PROJECT dropdown set to `jenkins` — only matching jobs are shown:
+
+![Filtered View Example](docs/images/dropdown-filter-view-filtered-01.png)
+
+#### Regex Pattern Tips
+
+The **Include jobs by regex** field and the **Job Name Regex** dropdown source work together but serve different purposes:
+
+| Field | Purpose | Example |
+|---|---|---|
+| **Include jobs by regex** (view config) | Controls which jobs the view can see at all | `tx-generator/wallets/.*/.*/.*/.*` |
+| **Job Name Regex** (dropdown source) | Extracts a capture group value for the dropdown | `tx-generator/wallets/([^/]+)/.*` |
+
+The include regex must be broad enough to cover all jobs you want the dropdowns to filter. The dropdown regex then extracts specific segments as dropdown values.
 
 ### 2. Dynamic Build Filter Column
 
@@ -120,6 +182,23 @@ Supports:
   </dropdowns>
 </io.jenkins.plugins.dynamic_view_filter.DropdownFilterView>
 ```
+
+## Troubleshooting
+
+### Columns show N/A even though jobs have been built
+
+`DynamicBuildFilterColumn` filters build data through **all** `RunMatcher` filters configured on the view — not just dropdown selections. If you have a `Parameter Run Matcher Filter` in the view's **Filters** section (e.g., `LAB=remote`), every build that doesn't match that filter will be excluded, and the columns will show N/A.
+
+**To diagnose:**
+1. Go to **Edit View** → **Job Filters** section
+2. Check if any `Parameter Run Matcher Filter` is configured with restrictive criteria
+3. If the jobs don't have matching parameter values, all builds get filtered out
+
+**To fix:**
+- Remove or adjust the `Parameter Run Matcher Filter` if it's too restrictive
+- Or use `Parameter Build Filter Column` instead — it applies its own filter independently without requiring a view-level filter
+
+> **Tip:** `DynamicBuildFilterColumn` + `Parameter Run Matcher Filter` is a global approach (affects all wrapped columns). `Parameter Build Filter Column` is a per-column approach (each column filters independently). Choose based on whether you want uniform or independent filtering.
 
 ## Requirements
 

@@ -1,0 +1,6 @@
+<?jelly escape-by-default='true'?>
+<div>
+  Wraps any standard column (Status, Weather, Last Success, etc.) and filters
+  build data through the view's RunMatcher job filters before the delegate renders.
+  Works reliably with Pipeline, FreeStyle, and all other job types.
+</div>

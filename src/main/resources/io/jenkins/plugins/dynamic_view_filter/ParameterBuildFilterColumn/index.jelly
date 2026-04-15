@@ -1,0 +1,6 @@
+<?jelly escape-by-default='true'?>
+<div>
+  A self-contained column that filters build data by a parameter name and value
+  regex. Configure the matching directly on the column — no separate view-level
+  filter required.
+</div>
