@@ -123,8 +123,12 @@ Supports:
 
 ## Requirements
 
-- Jenkins 2.479.3 or newer
+- Jenkins 2.528.3 or newer
 - [View Job Filters](https://plugins.jenkins.io/view-job-filters/) plugin
+
+## Usage Scenarios
+
+See [docs/USAGE_SCENARIOS.md](docs/USAGE_SCENARIOS.md) for detailed walkthroughs covering common setups like multi-environment dashboards, dropdown-driven project views, Pipeline job filtering, and more.
 
 ## Changelog
 
@@ -132,7 +136,7 @@ See [GitHub Releases](https://github.com/jenkinsci/dynamic-view-filter-plugin/re
 
 ## Contributing
 
-Refer to the Jenkins [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md) for general information.
+Refer to [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, build commands, and pull request guidelines. For build details, see [docs/BUILD.md](docs/BUILD.md).
 
 ## License
 
