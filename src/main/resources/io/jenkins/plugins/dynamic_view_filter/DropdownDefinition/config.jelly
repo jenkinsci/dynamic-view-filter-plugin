@@ -1,12 +1,12 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:st="jelly:stapler">
+  <st:adjunct includes="io.jenkins.plugins.dynamic_view_filter.DropdownDefinition.config"/>
   <f:entry title="Label" field="label">
     <f:textbox/>
   </f:entry>
   <f:entry title="Source Type" field="sourceType">
     <div class="jenkins-select">
-      <select name="sourceType" class="jenkins-select__input dropdown-source-type"
-              onchange="toggleDropdownFields(this)">
+      <select name="sourceType" class="jenkins-select__input dropdown-source-type">
         <f:option value="jobNameRegex" selected="${instance.sourceType == 'jobNameRegex'}">Job Name Regex</f:option>
         <f:option value="buildParameter" selected="${instance.sourceType == 'buildParameter'}">Build Parameter</f:option>
       </select>
@@ -25,23 +25,4 @@
     </f:entry>
   </div>
   <f:repeatableDeleteButton/>
-  <script>
-    function toggleDropdownFields(sel) {
-      var chunk = sel.closest('.repeated-chunk') || sel.closest('.dd-job-regex-field').parentNode;
-      if (!chunk) return;
-      var regexFields = chunk.querySelectorAll('.dd-job-regex-field');
-      var paramFields = chunk.querySelectorAll('.dd-build-param-field');
-      var val = sel.value;
-      for (var i = 0; i &lt; regexFields.length; i++) {
-        regexFields[i].style.display = val === 'jobNameRegex' ? '' : 'none';
-      }
-      for (var i = 0; i &lt; paramFields.length; i++) {
-        paramFields[i].style.display = val === 'buildParameter' ? '' : 'none';
-      }
-    }
-    // Initialize all existing dropdowns on page load
-    document.querySelectorAll('.dropdown-source-type').forEach(function(sel) {
-      toggleDropdownFields(sel);
-    });
-  </script>
 </j:jelly>
