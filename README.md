@@ -85,6 +85,28 @@ Multiple dropdowns combine with AND logic. All standard ListView features (colum
 
 > **Important:** The Dropdown Filter View is a ListView — it only sees jobs that match the view's **Include jobs by regex** field. You must configure a regex pattern (e.g., `.*`) and enable **Recurse in subfolders** in the view configuration for the dropdowns to discover and filter jobs. The dropdown regex/parameter filters narrow down from this base set.
 
+#### Filter Bar Behavior
+
+- **Collapsible:** Click the **Filters** toggle to collapse or expand the filter bar. The state is persisted in `localStorage` — it remembers your preference across page loads.
+- **Auto-submit:** Selecting a value in any dropdown immediately applies the filter (no submit button needed).
+- **Clear All:** Resets all dropdowns to "-- All --" and resubmits, without a full page reload.
+- **Only actual jobs shown:** Folder items are automatically excluded from the job table — only `Job` items (Pipeline, FreeStyle, Matrix, etc.) appear in the filtered results.
+
+Here is an example with the PROJECT dropdown set to `jenkins` — only matching jobs are shown:
+
+![Filtered View Example](docs/images/dropdown-filter-view-filtered-01.png)
+
+#### Regex Pattern Tips
+
+The **Include jobs by regex** field and the **Job Name Regex** dropdown source work together but serve different purposes:
+
+| Field | Purpose | Example |
+|---|---|---|
+| **Include jobs by regex** (view config) | Controls which jobs the view can see at all | `tx-generator/wallets/.*/.*/.*/.*` |
+| **Job Name Regex** (dropdown source) | Extracts a capture group value for the dropdown | `tx-generator/wallets/([^/]+)/.*` |
+
+The include regex must be broad enough to cover all jobs you want the dropdowns to filter. The dropdown regex then extracts specific segments as dropdown values.
+
 ### 2. Dynamic Build Filter Column
 
 A drop-in replacement for `BuildFilterColumn`. Wraps any standard column (Status, Weather, Last Success, Last Failure, etc.) and filters the build data through the view's `RunMatcher` job filters before the delegate renders.
