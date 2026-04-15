@@ -2,6 +2,8 @@
 
 [![Build Status](https://ci.jenkins.io/job/Plugins/job/dynamic-view-filter-plugin/job/main/badge/icon)](https://ci.jenkins.io/job/Plugins/job/dynamic-view-filter-plugin/job/main/)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/dynamic-view-filter.svg)](https://plugins.jenkins.io/dynamic-view-filter)
+[![Jenkins Plugin Installs](https://img.shields.io/jenkins/plugin/i/dynamic-view-filter.svg?color=blue)](https://plugins.jenkins.io/dynamic-view-filter)
+[![Contributors](https://img.shields.io/github/contributors/jenkinsci/dynamic-view-filter-plugin.svg)](https://github.com/jenkinsci/dynamic-view-filter-plugin/graphs/contributors)
 
 Dynamic view filters with auto-populated dropdown menus, build filter columns, and parameter-based run matching for Jenkins.
 
