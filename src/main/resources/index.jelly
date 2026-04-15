@@ -1,0 +1,6 @@
+<?jelly escape-by-default='true'?>
+<div>
+    Dynamic view filters with auto-populated dropdown menus, build filter columns,
+    and parameter-based run matching for Jenkins. Works with Pipeline, FreeStyle,
+    Matrix, and any job type.
+</div>

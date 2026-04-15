@@ -1,0 +1,12 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
+  <!-- Include all standard ListView config (columns, job filters, regex, etc.) -->
+  <st:include page="configure-entries.jelly" class="hudson.model.ListView"/>
+
+  <!-- Dropdown Filters section -->
+  <f:section title="Dropdown Filters">
+    <f:entry>
+      <f:repeatableProperty field="dropdowns" add="Add Dropdown"/>
+    </f:entry>
+  </f:section>
+</j:jelly>

@@ -1,0 +1,42 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+  <f:entry title="Name (regex):" field="nameRegex">
+    <f:textbox/>
+  </f:entry>
+  <f:entry title="Value (regex):" field="valueRegex">
+    <f:textbox/>
+  </f:entry>
+  <f:entry>
+    <f:checkbox title="Match the configured default values instead of actual build values"
+                field="useDefaultValue"/>
+  </f:entry>
+  <f:entry>
+    <f:checkbox title="Match against this many previous builds (blank or 0 for all)"
+                field="matchAllBuilds" default="true"/>
+    <div>
+      <input class="jenkins-input" name="maxBuildsToMatch"
+             value="${instance.maxBuildsToMatch}" size="10" maxlength="10"/>
+    </div>
+  </f:entry>
+  <f:entry>
+    <f:checkbox title="Match against builds in progress"
+                field="matchBuildsInProgress" default="true"/>
+  </f:entry>
+  <f:entry title="Description (regex):" field="descriptionRegex">
+    <f:textbox/>
+  </f:entry>
+  <f:entry title="Match Type:">
+    <div class="jenkins-select">
+      <select name="includeExcludeTypeString" class="jenkins-select__input">
+        <f:option value="includeMatched"
+                  selected="${instance.includeMatched}">Include Matched - Add jobs that match this filter</f:option>
+        <f:option value="includeUnmatched"
+                  selected="${instance.includeUnmatched}">Include Unmatched - Add jobs that don't match this filter</f:option>
+        <f:option value="excludeMatched"
+                  selected="${instance.excludeMatched}">Exclude Matched - Filter out jobs that match this filter</f:option>
+        <f:option value="excludeUnmatched"
+                  selected="${instance.excludeUnmatched}">Exclude Unmatched - Filter out jobs that don't match this filter</f:option>
+      </select>
+    </div>
+  </f:entry>
+</j:jelly>

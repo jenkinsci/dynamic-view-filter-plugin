@@ -1,0 +1,7 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+  <j:invokeStatic var="allColumns" className="io.jenkins.plugins.dynamic_view_filter.DynamicBuildFilterColumn" method="doGetAllColumns"/>
+  <f:block>
+    <f:hetero-radio descriptors="${allColumns}" field="delegate"/>
+  </f:block>
+</j:jelly>

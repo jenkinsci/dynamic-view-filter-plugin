@@ -1,0 +1,38 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
+  <!-- Dropdown filter bar -->
+  <j:if test="${!empty(it.dropdowns)}">
+    <div style="background: var(--section-header-bg-color, #f8f8f8); padding: 10px 14px; margin-bottom: 15px; border-radius: 6px; border: 1px solid var(--input-border, #ccc);">
+      <form method="GET" action="">
+        <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+          <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
+            <div>
+              <label style="font-weight: bold; margin-right: 4px;">${dd.label}:</label>
+              <div class="jenkins-select" style="display: inline-block;">
+                <select name="dd_${loop.index}" class="jenkins-select__input"
+                        onchange="this.form.submit()">
+                  <option value="">-- All --</option>
+                  <j:forEach var="val" items="${it.getDropdownValues(dd)}">
+                    <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
+                    <j:choose>
+                      <j:when test="${isSelected}">
+                        <option value="${val}" selected="selected">${val}</option>
+                      </j:when>
+                      <j:otherwise>
+                        <option value="${val}">${val}</option>
+                      </j:otherwise>
+                    </j:choose>
+                  </j:forEach>
+                </select>
+              </div>
+            </div>
+          </j:forEach>
+          <a href="?" class="jenkins-button" style="text-decoration: none;">Clear All</a>
+        </div>
+      </form>
+    </div>
+  </j:if>
+
+  <!-- Standard View content (project table, etc.) -->
+  <st:include page="main.jelly" class="hudson.model.View"/>
+</j:jelly>

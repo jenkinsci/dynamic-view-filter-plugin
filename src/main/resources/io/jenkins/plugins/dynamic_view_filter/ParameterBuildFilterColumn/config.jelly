@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+  <j:invokeStatic var="allColumns" className="io.jenkins.plugins.dynamic_view_filter.ParameterBuildFilterColumn" method="doGetAllColumns"/>
+  <f:entry title="Parameter Name (regex)" field="paramName">
+    <f:textbox/>
+  </f:entry>
+  <f:entry title="Parameter Value (regex)" field="paramValueRegex">
+    <f:textbox/>
+  </f:entry>
+  <f:block>
+    <f:hetero-radio descriptors="${allColumns}" field="delegate"/>
+  </f:block>
+</j:jelly>
