@@ -161,6 +161,23 @@ Supports:
 </io.jenkins.plugins.dynamic_view_filter.DropdownFilterView>
 ```
 
+## Troubleshooting
+
+### Columns show N/A even though jobs have been built
+
+`DynamicBuildFilterColumn` filters build data through **all** `RunMatcher` filters configured on the view — not just dropdown selections. If you have a `Parameter Run Matcher Filter` in the view's **Filters** section (e.g., `LAB=remote`), every build that doesn't match that filter will be excluded, and the columns will show N/A.
+
+**To diagnose:**
+1. Go to **Edit View** → **Job Filters** section
+2. Check if any `Parameter Run Matcher Filter` is configured with restrictive criteria
+3. If the jobs don't have matching parameter values, all builds get filtered out
+
+**To fix:**
+- Remove or adjust the `Parameter Run Matcher Filter` if it's too restrictive
+- Or use `Parameter Build Filter Column` instead — it applies its own filter independently without requiring a view-level filter
+
+> **Tip:** `DynamicBuildFilterColumn` + `Parameter Run Matcher Filter` is a global approach (affects all wrapped columns). `Parameter Build Filter Column` is a per-column approach (each column filters independently). Choose based on whether you want uniform or independent filtering.
+
 ## Requirements
 
 - Jenkins 2.528.3 or newer
