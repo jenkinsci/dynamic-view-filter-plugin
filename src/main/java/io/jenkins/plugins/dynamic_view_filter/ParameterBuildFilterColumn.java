@@ -85,8 +85,8 @@ public class ParameterBuildFilterColumn extends ListViewColumn {
         return false;
     }
 
-    public static List<Descriptor<ListViewColumn>> doGetAllColumns() {
-        return DynamicBuildFilterColumn.doGetAllColumns();
+    public static List<Descriptor<ListViewColumn>> getAllColumns() {
+        return DynamicBuildFilterColumn.getAllColumns();
     }
 
     @Extension

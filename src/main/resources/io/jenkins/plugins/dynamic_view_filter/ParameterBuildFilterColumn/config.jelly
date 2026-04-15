@@ -1,6 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-  <j:invokeStatic var="allColumns" className="io.jenkins.plugins.dynamic_view_filter.ParameterBuildFilterColumn" method="doGetAllColumns"/>
+  <j:invokeStatic var="allColumns" className="io.jenkins.plugins.dynamic_view_filter.ParameterBuildFilterColumn" method="getAllColumns"/>
   <f:entry title="Parameter Name (regex)" field="paramName">
     <f:textbox/>
   </f:entry>

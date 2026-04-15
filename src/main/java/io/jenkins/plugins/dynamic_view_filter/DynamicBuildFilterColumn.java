@@ -52,7 +52,7 @@ public class DynamicBuildFilterColumn extends ListViewColumn {
 
     // ---- static helpers used by config.jelly ----
 
-    public static List<Descriptor<ListViewColumn>> doGetAllColumns() {
+    public static List<Descriptor<ListViewColumn>> getAllColumns() {
         DescriptorExtensionList<ListViewColumn, Descriptor<ListViewColumn>> all = ListViewColumn.all();
         List<Descriptor<ListViewColumn>> list = new ArrayList<>();
         for (Descriptor<ListViewColumn> descriptor : all) {
