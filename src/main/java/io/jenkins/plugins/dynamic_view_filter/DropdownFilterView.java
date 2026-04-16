@@ -38,6 +38,7 @@ import org.kohsuke.stapler.StaplerRequest2;
 public class DropdownFilterView extends ListView {
 
     private List<DropdownDefinition> dropdowns = new ArrayList<>();
+    private String filterPosition = "top";
 
     @DataBoundConstructor
     public DropdownFilterView(String name) {
@@ -54,6 +55,14 @@ public class DropdownFilterView extends ListView {
 
     public void setDropdowns(List<DropdownDefinition> dropdowns) {
         this.dropdowns = dropdowns;
+    }
+
+    public String getFilterPosition() {
+        return filterPosition != null ? filterPosition : "top";
+    }
+
+    public void setFilterPosition(String filterPosition) {
+        this.filterPosition = filterPosition;
     }
 
     // ---- item filtering based on dropdown selections ----
@@ -161,6 +170,8 @@ public class DropdownFilterView extends ListView {
         } else {
             dropdowns = new ArrayList<>();
         }
+        String pos = form.optString("filterPosition", "top");
+        filterPosition = ("sidebar".equals(pos)) ? "sidebar" : "top";
     }
 
     // ---- dynamic RunMatchers from build parameter dropdown selections ----

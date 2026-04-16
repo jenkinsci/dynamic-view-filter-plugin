@@ -1,6 +1,5 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:st="jelly:stapler">
-  <st:adjunct includes="io.jenkins.plugins.dynamic_view_filter.DropdownDefinition.config"/>
   <f:entry title="Label" field="label">
     <f:textbox/>
   </f:entry>

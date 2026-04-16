@@ -4,9 +4,19 @@
   <st:include page="configure-entries.jelly" class="hudson.model.ListView"/>
 
   <!-- Dropdown Filters section -->
+  <script src="${resURL}/plugin/dynamic-view-filter/js/dropdown-config.js"></script>
   <f:section title="Dropdown Filters">
+    <f:entry title="Filter Position" field="filterPosition"
+             description="Where to display the dropdown filters: above the job table or as a collapsible sidebar on the right.">
+      <div class="jenkins-select">
+        <select name="filterPosition" class="jenkins-select__input">
+          <f:option value="top" selected="${it.filterPosition == 'top'}">Top (above table)</f:option>
+          <f:option value="sidebar" selected="${it.filterPosition == 'sidebar'}">Sidebar (right side)</f:option>
+        </select>
+      </div>
+    </f:entry>
     <f:entry>
-      <f:repeatableProperty field="dropdowns" add="Add Dropdown"/>
+      <f:repeatableProperty field="dropdowns" add="Add Dropdown" header="Dropdown Filter"/>
     </f:entry>
   </f:section>
 </j:jelly>

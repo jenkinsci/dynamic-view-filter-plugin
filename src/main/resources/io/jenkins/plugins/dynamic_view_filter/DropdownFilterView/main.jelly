@@ -5,49 +5,76 @@
 
   <!-- Dropdown filter bar (positioned after tab bar via external JS) -->
   <j:if test="${!empty(it.dropdowns)}">
-    <st:adjunct includes="io.jenkins.plugins.dynamic_view_filter.DropdownFilterView.view"/>
-    <div id="dynamic-view-filter-bar" style="display: none; margin-bottom: 16px;">
-      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+    <link rel="stylesheet" href="${resURL}/plugin/dynamic-view-filter/css/dropdown-view.css"/>
+    <script src="${resURL}/plugin/dynamic-view-filter/js/dropdown-view.js"></script>
+    <div id="dynamic-view-filter-bar" data-position="${it.filterPosition}"
+         class="dvf-filter-bar jenkins-hidden">
+      <div class="dvf-toggle-row">
+        <button type="button" class="jenkins-button jenkins-button--tertiary jenkins-!-destructive-color"
+                id="dvf-clear-all">
+          <l:icon src="symbol-close-circle-outline plugin-ionicons-api" class="icon-sm"/><span class="dvf-reset-label"> Reset</span>
+        </button>
         <button type="button" class="jenkins-button jenkins-button--tertiary"
-                id="dvf-toggle"
-                style="padding: 4px 10px; font-size: var(--font-size-xs);">
-          <l:icon src="symbol-funnel-outline plugin-ionicons-api" class="icon-sm"/>
-          <span class="dvf-chevron-down"><l:icon src="symbol-chevron-down-outline plugin-ionicons-api" class="icon-sm"/></span>
-          <span class="dvf-chevron-right" style="display: none;"><l:icon src="symbol-chevron-forward-outline plugin-ionicons-api" class="icon-sm"/></span>
-          Filters
+                id="dvf-toggle">
+          <l:icon src="symbol-options-outline plugin-ionicons-api" class="icon-sm"/>
         </button>
       </div>
       <div id="dvf-content">
         <form id="dvf-form" method="GET" action="">
-          <div style="display: flex; gap: 20px; align-items: flex-end; justify-content: flex-start; flex-wrap: wrap;">
-            <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
-              <div style="min-width: 120px; flex: 0 1 auto;">
-                <label class="jenkins-form-label" style="margin-bottom: 4px; color: var(--text-color-secondary);">${dd.label}</label>
-                <div class="jenkins-select">
-                  <select name="dd_${loop.index}" class="jenkins-select__input"
-                          style="padding-right: 30px; text-align: center;">
-                    <option value="">-- All --</option>
-                    <j:forEach var="val" items="${it.getDropdownValues(dd)}">
-                      <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
-                      <j:choose>
-                        <j:when test="${isSelected}">
-                          <option value="${val}" selected="selected">${val}</option>
-                        </j:when>
-                        <j:otherwise>
-                          <option value="${val}">${val}</option>
-                        </j:otherwise>
-                      </j:choose>
-                    </j:forEach>
-                  </select>
-                </div>
+          <j:choose>
+            <j:when test="${it.filterPosition == 'sidebar'}">
+              <!-- Sidebar: vertical stacked dropdowns -->
+              <div class="dvf-sidebar-layout">
+                <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
+                  <div>
+                    <label class="jenkins-form-label">${dd.label}</label>
+                    <div class="jenkins-select">
+                      <select name="dd_${loop.index}" class="jenkins-select__input">
+                        <option value="">-- All --</option>
+                        <j:forEach var="val" items="${it.getDropdownValues(dd)}">
+                          <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
+                          <j:choose>
+                            <j:when test="${isSelected}">
+                              <option value="${val}" selected="selected">${val}</option>
+                            </j:when>
+                            <j:otherwise>
+                              <option value="${val}">${val}</option>
+                            </j:otherwise>
+                          </j:choose>
+                        </j:forEach>
+                      </select>
+                    </div>
+                  </div>
+                </j:forEach>
               </div>
-            </j:forEach>
-            <button type="button" id="dvf-clear-all"
-                    class="jenkins-button jenkins-!-destructive-color"
-                    style="align-self: flex-end; padding: 4px 10px; font-size: var(--font-size-xs);">
-              <l:icon src="symbol-trash" class="icon-sm"/> Clear All
-            </button>
-          </div>
+            </j:when>
+            <j:otherwise>
+              <!-- Top: horizontal flex row -->
+              <div class="dvf-top-layout">
+                <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
+                  <div class="dvf-dropdown-item">
+                    <label class="jenkins-form-label">${dd.label}</label>
+                    <div class="jenkins-select">
+                      <select name="dd_${loop.index}" class="jenkins-select__input">
+                        <option value="">-- All --</option>
+                        <j:forEach var="val" items="${it.getDropdownValues(dd)}">
+                          <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
+                          <j:choose>
+                            <j:when test="${isSelected}">
+                              <option value="${val}" selected="selected">${val}</option>
+                            </j:when>
+                            <j:otherwise>
+                              <option value="${val}">${val}</option>
+                            </j:otherwise>
+                          </j:choose>
+                        </j:forEach>
+                      </select>
+                    </div>
+                  </div>
+                </j:forEach>
+              </div>
+            </j:otherwise>
+          </j:choose>
         </form>
       </div>
     </div>

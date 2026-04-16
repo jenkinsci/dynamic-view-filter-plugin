@@ -118,6 +118,11 @@ public class FilteredJob extends Job implements TopLevelItem {
     }
 
     @Override
+    public String getDescription() {
+        return delegateJob.getDescription();
+    }
+
+    @Override
     protected void removeRun(Run run) {
         // read-only wrapper
     }

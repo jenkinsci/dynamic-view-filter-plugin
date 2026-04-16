@@ -8,6 +8,6 @@
     <f:textbox/>
   </f:entry>
   <f:block>
-    <f:hetero-radio descriptors="${allColumns}" field="delegate"/>
+    <f:dropdownDescriptorSelector descriptors="${allColumns}" field="delegate"/>
   </f:block>
 </j:jelly>

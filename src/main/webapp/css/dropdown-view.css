@@ -1,0 +1,145 @@
+/* Dynamic View Filter - dropdown filter bar styles */
+
+/* Filter bar container */
+.dvf-filter-bar {
+    margin-bottom: 16px;
+}
+
+/* Toggle button row */
+.dvf-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+/* No margin below toggle when collapsed */
+.dvf-filter-bar--collapsed .dvf-toggle-row {
+    margin-bottom: 0;
+}
+
+/* Hide Reset text when collapsed (both modes), keep icon */
+.dvf-filter-bar--collapsed .dvf-reset-label {
+    display: none;
+}
+
+/* ===== TOP MODE ===== */
+
+/* Top mode: bar is flex — content left, toggle-row top-right */
+.dvf-filter-bar--sticky {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    position: sticky;
+    top: 56px;
+    z-index: 10;
+    background: var(--background, #fff);
+    padding-top: 8px;
+    padding-bottom: 4px;
+}
+
+/* Toggle-row pinned top-right */
+.dvf-filter-bar--sticky > .dvf-toggle-row {
+    flex-shrink: 0;
+    margin-left: auto;
+    margin-bottom: 0;
+    order: 1;
+}
+
+/* Content fills remaining space */
+.dvf-filter-bar--sticky > #dvf-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    order: 0;
+}
+
+/* Top mode: horizontal flex row for dropdowns */
+.dvf-top-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.dvf-top-layout .dvf-dropdown-item {
+    min-width: 120px;
+    flex: 0 1 auto;
+}
+
+/* Top mode collapsed: hide content */
+.dvf-filter-bar--sticky.dvf-filter-bar--collapsed > #dvf-content {
+    display: none;
+}
+
+/* Top mode expanded: card container */
+.dvf-filter-bar--sticky:not(.dvf-filter-bar--collapsed) {
+    border: 2px solid var(--panel-border-color, #e4e9f0);
+    border-radius: 16px;
+    padding: 12px;
+}
+
+/* Top mode collapsed: no card, just the toggle */
+.dvf-filter-bar--sticky.dvf-filter-bar--collapsed {
+    border: none;
+    padding-top: 8px;
+    padding-bottom: 0;
+    background: transparent;
+}
+
+/* ===== SIDEBAR MODE ===== */
+
+/* Sidebar toggle-row: Reset left, toggle right */
+.dvf-sidebar-wrapper .dvf-toggle-row {
+    justify-content: space-between;
+}
+
+/* Sidebar mode: vertical stacked dropdowns */
+.dvf-sidebar-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Sidebar wrapper (table + sidebar side by side) */
+.dvf-sidebar-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.dvf-sidebar-wrapper > :first-child {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+}
+
+/* Sidebar filter bar - pane-frame style */
+.dvf-sidebar-wrapper > .dvf-filter-bar {
+    width: 220px;
+    flex-shrink: 0;
+    padding: 12px;
+    position: sticky;
+    top: 56px;
+    align-self: flex-start;
+    margin-bottom: 0;
+    background: var(--background, #fff);
+    z-index: 1;
+    border: 2px solid var(--panel-border-color, #e4e9f0);
+    border-radius: 16px;
+}
+
+/* Sidebar collapsed: no card border, just the toggle */
+.dvf-sidebar-wrapper > .dvf-filter-bar.dvf-sidebar--collapsed {
+    width: auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+/* Sidebar collapsed: icons side by side, compact */
+.dvf-sidebar-wrapper > .dvf-filter-bar.dvf-sidebar--collapsed .dvf-toggle-row {
+    justify-content: flex-end;
+    gap: 0;
+}
