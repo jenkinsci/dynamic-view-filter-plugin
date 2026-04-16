@@ -10,14 +10,12 @@
     <f:checkbox title="Match the configured default values instead of actual build values"
                 field="useDefaultValue"/>
   </f:entry>
-  <f:entry>
-    <f:checkbox title="Match against this many previous builds (blank or 0 for all)"
-                field="matchAllBuilds" default="true"/>
-    <div>
-      <input class="jenkins-input" name="maxBuildsToMatch"
-             value="${instance.maxBuildsToMatch}" size="10" maxlength="10"/>
-    </div>
-  </f:entry>
+  <f:optionalBlock inline="true" field="matchAllBuilds" title="Match against all builds" negative="true">
+    <f:entry description="Limit to this many previous builds">
+      <f:number name="maxBuildsToMatch"
+                value="${instance.maxBuildsToMatch}" min="0"/>
+    </f:entry>
+  </f:optionalBlock>
   <f:entry>
     <f:checkbox title="Match against builds in progress"
                 field="matchBuildsInProgress" default="true"/>
