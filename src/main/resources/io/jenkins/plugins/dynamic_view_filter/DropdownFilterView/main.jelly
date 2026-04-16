@@ -16,7 +16,7 @@
         </button>
         <button type="button" class="jenkins-button jenkins-button--tertiary"
                 id="dvf-toggle">
-          <l:icon src="symbol-options-outline plugin-ionicons-api" class="icon-sm"/>
+          <l:icon src="symbol-options-outline plugin-ionicons-api" class="icon-sm"/><span class="dvf-toggle-label"> Filters</span>
         </button>
       </div>
       <div id="dvf-content">

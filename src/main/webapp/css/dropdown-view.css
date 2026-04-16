@@ -24,6 +24,11 @@
     display: none;
 }
 
+/* Hide Filters text when collapsed (both modes), keep icon */
+.dvf-filter-bar--collapsed .dvf-toggle-label {
+    display: none;
+}
+
 /* ===== TOP MODE ===== */
 
 /* Top mode: bar is flex — content left, toggle-row top-right */
@@ -75,9 +80,19 @@
 
 /* Top mode expanded: card container */
 .dvf-filter-bar--sticky:not(.dvf-filter-bar--collapsed) {
-    border: 2px solid var(--panel-border-color, #e4e9f0);
-    border-radius: 16px;
-    padding: 12px;
+    border-radius: 1rem;
+    padding: 0.5rem 1rem 1rem;
+}
+
+/* Card border via ::after (matches Jenkins l:card) */
+.dvf-filter-bar--sticky:not(.dvf-filter-bar--collapsed)::after {
+    border: var(--card-border-width, 2px) solid var(--card-border-color);
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
 }
 
 /* Top mode collapsed: no card, just the toggle */
@@ -93,6 +108,7 @@
 /* Sidebar toggle-row: Reset left, toggle right */
 .dvf-sidebar-wrapper .dvf-toggle-row {
     justify-content: space-between;
+    padding: 0.5rem 0.5rem 0;
 }
 
 /* Sidebar mode: vertical stacked dropdowns */
@@ -100,12 +116,13 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding: 0 0.5rem 0.5rem;
 }
 
 /* Sidebar wrapper (table + sidebar side by side) */
 .dvf-sidebar-wrapper {
     display: flex;
-    gap: 12px;
+    gap: 4px;
     align-items: flex-start;
 }
 
@@ -113,29 +130,44 @@
     flex: 1;
     min-width: 0;
     overflow-x: auto;
+    border-radius: 0 1rem 1rem 0;
 }
 
-/* Sidebar filter bar - pane-frame style */
+/* Sidebar filter bar - card style */
 .dvf-sidebar-wrapper > .dvf-filter-bar {
     width: 220px;
     flex-shrink: 0;
-    padding: 12px;
+    padding: 0;
     position: sticky;
     top: 56px;
     align-self: flex-start;
     margin-bottom: 0;
-    background: var(--background, #fff);
+    background: transparent;
     z-index: 1;
-    border: 2px solid var(--panel-border-color, #e4e9f0);
-    border-radius: 16px;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+/* Card border via ::after (matches Jenkins l:card) */
+.dvf-sidebar-wrapper > .dvf-filter-bar::after {
+    border: var(--card-border-width, 2px) solid var(--card-border-color);
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
 }
 
 /* Sidebar collapsed: no card border, just the toggle */
 .dvf-sidebar-wrapper > .dvf-filter-bar.dvf-sidebar--collapsed {
     width: auto;
     padding: 0;
-    border: none;
     background: transparent;
+}
+
+.dvf-sidebar-wrapper > .dvf-filter-bar.dvf-sidebar--collapsed::after {
+    display: none;
 }
 
 /* Sidebar collapsed: icons side by side, compact */
