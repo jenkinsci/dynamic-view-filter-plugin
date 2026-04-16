@@ -2,41 +2,68 @@
     'use strict';
 
     function initFilterBar() {
-        var bar = document.getElementById('dynamic-view-filter-bar');
+        const bar = document.getElementById('dynamic-view-filter-bar');
         if (!bar) return;
 
-        var position = bar.getAttribute('data-position') || 'top';
-        var content = document.getElementById('dvf-content');
-        var toggle = document.getElementById('dvf-toggle');
-        var form = document.getElementById('dvf-form');
+        const position = bar.getAttribute('data-position') || 'top';
+        const content = document.getElementById('dvf-content');
+        const toggle = document.getElementById('dvf-toggle');
+        const form = document.getElementById('dvf-form');
 
         // Place bar inside .dashboard, between tab bar and table
-        var tabBar = document.getElementById('projectstatus-tabBar');
-        var dashboard = tabBar ? tabBar.parentNode : null;
+        const tabBar = document.getElementById('projectstatus-tabBar');
+        const dashboard = tabBar ? tabBar.parentNode : null;
 
         // Fallback: when no jobs match, Jenkins omits the dashboard/projectstatus-tabBar.
-        // Look for the .tabBarFrame instead so the filter bar still appears.
+        // Look for the .tabBarFrame (classic layout) or .jenkins-inline-page (new dashboard)
+        // so the filter bar still appears.
         if (!dashboard) {
-            var tabFrame = document.querySelector('.tabBarFrame');
-            if (!tabFrame) return;
-            var parent = tabFrame.parentNode;
+            const tabFrame = document.querySelector('.tabBarFrame');
+            // New dashboard layout: find the content area inside .jenkins-inline-page
+            const inlinePage = document.querySelector('.jenkins-inline-page');
+            let contentArea = null;
+            if (inlinePage) {
+                for (const child of inlinePage.children) {
+                    if (!child.classList.contains('jenkins-inline-page__side-panel')) {
+                        contentArea = child;
+                        break;
+                    }
+                }
+            }
+            const anchor = tabFrame || contentArea;
+            if (!anchor) return;
 
-            if (position === 'sidebar') {
-                // Wrap remaining content + bar in a sidebar layout
-                var emptyContent = tabFrame.nextElementSibling;
-                var wrapper = document.createElement('div');
+            if (position === 'sidebar' && contentArea) {
+                // New dashboard sidebar: wrap content + bar
+                const wrapper = document.createElement('div');
                 wrapper.classList.add('dvf-sidebar-wrapper');
+                contentArea.parentNode.replaceChild(wrapper, contentArea);
+                wrapper.appendChild(contentArea);
+                wrapper.appendChild(bar);
+                bar.classList.remove('jenkins-hidden');
+            } else if (position === 'sidebar' && tabFrame) {
+                // Classic layout sidebar fallback
+                const emptyContent = tabFrame.nextElementSibling;
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('dvf-sidebar-wrapper');
+                const parent = tabFrame.parentNode;
                 parent.insertBefore(wrapper, emptyContent);
-                if (emptyContent) wrapper.appendChild(emptyContent);
+                while (wrapper.nextSibling) {
+                    wrapper.appendChild(wrapper.nextSibling);
+                }
                 wrapper.appendChild(bar);
                 bar.classList.remove('jenkins-hidden');
             } else {
-                parent.insertBefore(bar, tabFrame.nextSibling);
+                if (tabFrame) {
+                    tabFrame.parentNode.insertBefore(bar, tabFrame.nextSibling);
+                } else if (contentArea) {
+                    contentArea.insertBefore(bar, contentArea.firstChild);
+                }
                 bar.classList.remove('jenkins-hidden');
                 bar.classList.add('dvf-filter-bar--sticky');
             }
         } else {
-            var desktopTable = dashboard.querySelector('.jenkins-mobile-hide');
+            const desktopTable = dashboard.querySelector('.jenkins-mobile-hide');
 
             if (position === 'sidebar' && desktopTable) {
                 initSidebar(bar, desktopTable, dashboard, tabBar);
@@ -49,7 +76,7 @@
         }
 
         // Restore collapse state from localStorage
-        var storageKey = 'dvf-collapsed-' + position;
+        const storageKey = 'dvf-collapsed-' + position;
         if (localStorage.getItem(storageKey) === 'true' && content && toggle) {
             collapseContent(content, position, bar);
         }
@@ -57,7 +84,7 @@
         // Toggle collapse/expand
         if (toggle) {
             toggle.addEventListener('click', function() {
-                var isCollapsed = bar.classList.contains('dvf-filter-bar--collapsed');
+                const isCollapsed = bar.classList.contains('dvf-filter-bar--collapsed');
                 if (isCollapsed) {
                     expandContent(content, position, bar);
                     localStorage.setItem(storageKey, 'false');
@@ -68,32 +95,33 @@
             });
         }
 
-        // Auto-submit dropdowns on change
+        // Auto-navigate dropdowns on change (avoids crumb in URL)
         if (form) {
-            form.querySelectorAll('select').forEach(function(sel) {
+            const selects = form.querySelectorAll('select');
+            selects.forEach(function(sel) {
                 sel.addEventListener('change', function() {
-                    form.submit();
+                    const location = new URL(window.location);
+                    selects.forEach(function(s) {
+                        location.searchParams.set(s.name, s.value);
+                    });
+                    window.location.href = location.toString();
                 });
             });
         }
 
         // Clear All button
-        var clearBtn = document.getElementById('dvf-clear-all');
-        if (clearBtn && form) {
+        const clearBtn = document.getElementById('dvf-clear-all');
+        if (clearBtn) {
             clearBtn.addEventListener('click', function() {
                 clearBtn.classList.add('dvf-spinning');
-                var selects = form.querySelectorAll('select');
-                for (var i = 0; i < selects.length; i++) {
-                    selects[i].selectedIndex = 0;
-                }
-                setTimeout(function() { form.submit(); }, 500);
+                setTimeout(function() { window.location.href = '.'; }, 500);
             });
         }
     }
 
     function initSidebar(bar, desktopTable, dashboard, tabBar) {
         // Create a flex wrapper for table + sidebar, insert after tab bar
-        var wrapper = document.createElement('div');
+        const wrapper = document.createElement('div');
         wrapper.classList.add('dvf-sidebar-wrapper');
 
         // Insert wrapper after tab bar

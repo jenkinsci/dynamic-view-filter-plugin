@@ -52,7 +52,7 @@
     align-items: flex-start;
     gap: 8px;
     position: sticky;
-    top: 56px;
+    top: var(--header-height, 56px);
     z-index: 10;
     background: var(--background, #fff);
     padding-top: 8px;
@@ -138,7 +138,7 @@
 /* Sidebar wrapper (table + sidebar side by side) */
 .dvf-sidebar-wrapper {
     display: flex;
-    gap: 4px;
+    gap: 12px;
     align-items: flex-start;
 }
 
@@ -155,7 +155,7 @@
     flex-shrink: 0;
     padding: 0;
     position: sticky;
-    top: 56px;
+    top: var(--header-height, 56px);
     align-self: flex-start;
     margin-bottom: 0;
     background: transparent;

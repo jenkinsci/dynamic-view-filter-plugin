@@ -1,4 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler">
-  <st:include it="${it.delegate}" page="columnHeader.jelly"/>
+  <j:if test="${it.delegate != null}">
+    <st:include it="${it.delegate}" page="columnHeader.jelly"/>
+  </j:if>
 </j:jelly>
