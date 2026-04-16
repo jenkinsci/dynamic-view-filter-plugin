@@ -39,13 +39,17 @@ dynamic-view-filter-plugin/
 │   │           │   └── index.jelly              # Extension point description
 │   │           ├── DropdownFilterView/
 │   │           │   ├── main.jelly               # View rendering with dropdowns
-│   │           │   ├── view.js                  # CSP-compliant external JS for filter bar
 │   │           │   ├── configure-entries.jelly   # View configuration form
 │   │           │   └── newViewDetail.jelly       # Create View dialog description
 │   │           ├── DropdownDefinition/
 │   │           │   ├── config.jelly             # Dropdown source type config
 │   │           │   └── config.js                # CSP-compliant external JS for field toggling
 │   │           └── Messages.properties          # Display name strings
+│   ├── webapp/
+│   │   ├── css/
+│   │   │   └── dropdown-view.css                # Filter bar styles (top + sidebar)
+│   │   └── js/
+│   │       └── dropdown-view.js                 # Filter bar behavior (collapse, submit, sidebar)
 │   └── test/java/io/jenkins/plugins/dynamic_view_filter/
 │       ├── DynamicBuildFilterColumnTest.java     # 10 tests
 │       └── DropdownFilterViewTest.java           # 8 tests
@@ -62,8 +66,16 @@ dynamic-view-filter-plugin/
     ├── BUILD.md                                 # This file
     ├── USAGE_SCENARIOS.md                       # Detailed usage scenarios
     └── images/                                  # Screenshots for README
-        ├── dropdown-filter-view.png
-        ├── dropdown-filter-view-filtered-01.png
+        ├── dropdown-filter-view-top-expanded.png
+        ├── dropdown-filter-view-top-filtered.png
+        ├── dropdown-filter-view-top-collapsed.png
+        ├── dropdown-filter-view-sidebar-expanded.png
+        ├── dropdown-filter-view-sidebar-filtered.png
+        ├── dropdown-filter-view-sidebar-collapsed.png
+        ├── dropdown-view-config-dropdown-filters.png
+        ├── dropdown-view-config-columns.png
+        ├── dropdown-view-config-filter-position.png
+        ├── dropdown-view-config-job-filters.png
         ├── dropdown-view-build-parameter-filter.png
         ├── dropdown-view-job-name-regex-filter.png
         ├── dynamic-build-filter-column.png

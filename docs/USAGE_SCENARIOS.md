@@ -123,7 +123,7 @@ The upstream `BuildFilterColumn` from View Job Filters breaks with Pipeline jobs
 
 ### Expected Outcome
 
-- Dynamic Build Filter Column resolves the parent view at render time from the Stapler request context — no stored XStream references.
+- Dynamic Build Filter Column resolves the parent view at render time from the Stapler request context instead of using stored XStream references.
 - Pipeline jobs render correctly with filtered build data.
 - FreeStyle, Matrix, and other job types continue to work as before.
 
@@ -133,7 +133,7 @@ The upstream `BuildFilterColumn` from View Job Filters breaks with Pipeline jobs
 
 ### Problem
 
-You have parameters with varying names across jobs — `deploy_region`, `target_region`, `aws_region` — and you want a single filter to match any of them when the value is `us-east-1`.
+You have parameters with varying names across jobs (`deploy_region`, `target_region`, `aws_region`) and you want a single filter to match any of them when the value is `us-east-1`.
 
 ### Setup
 
@@ -203,3 +203,74 @@ Some jobs are defined with default parameter values but haven't been built yet. 
 | Replace broken `BuildFilterColumn` for Pipeline jobs | Dynamic Build Filter Column |
 | Filter by job folder path / naming convention | Dropdown Filter View with Job Name Regex source |
 | Filter by actual build parameter values with auto-discovery | Dropdown Filter View with Build Parameter source |
+
+---
+
+## Scenario 9: Sidebar Filter Layout for Wide Tables
+
+### Problem
+
+You have many columns in the job table and placing the filter bar at the top pushes the table down too far, especially with many dropdown filters. You want the filters on the side so users can see both filters and the table at the same time.
+
+### Setup
+
+1. Open the **Dropdown Filter View** configuration.
+2. Set **Filter Position** to **Sidebar**.
+3. Save.
+
+### Expected Outcome
+
+- The filter bar appears as a vertical panel on the right side of the job table.
+- Dropdowns are stacked vertically in the sidebar.
+- The sidebar sticks to the viewport while scrolling (sticky positioning).
+- Collapsing the sidebar reduces it to a compact icon strip, giving the table full width.
+
+---
+
+## Scenario 10: Multi-Level Folder Path Extraction
+
+### Problem
+
+Your jobs are organized in a deep folder hierarchy like `project/region/module/platform/component/action`. You want separate dropdowns for module, platform, component, and action — but each dropdown regex can only extract one capture group.
+
+### Setup
+
+1. Create a **Dropdown Filter View**.
+2. Set **Include jobs by regex** to `project/region/.*/.*/.*/.*` and enable **Recurse in subfolders**.
+3. Add four dropdowns, each extracting a different path segment into group 1:
+
+| Label | Job Name Pattern |
+|---|---|
+| Module | `project/region/([^/]+)/.*` |
+| Platform | `project/region/[^/]+/([^/]+)/.*` |
+| Component | `project/region/[^/]+/[^/]+/([^/]+)/.*` |
+| Action | `project/region/[^/]+/[^/]+/[^/]+/([^/]+)` |
+
+Note: use `[^/]+` (non-capturing) for path segments you want to skip, and `([^/]+)` (capturing group 1) for the segment you want to extract.
+
+### Expected Outcome
+
+- Four dropdowns appear: Module, Platform, Component, Action.
+- Each auto-populates with the distinct values from its respective path segment.
+- Selecting `payments` + `linux` filters to only jobs for the payments module on Linux.
+- All four dropdowns combine with AND logic.
+
+---
+
+## Scenario 11: Collapsible Filter Bar for Clean Dashboards
+
+### Problem
+
+You have a dashboard view on a wall-mounted monitor. Most of the time, users just want to see the job table without filter UI clutter. Occasionally they need to apply a filter.
+
+### Setup
+
+1. Configure the **Dropdown Filter View** with dropdowns (top or sidebar mode).
+2. No special configuration needed — the collapse feature is built in.
+
+### Expected Outcome
+
+- The filter bar shows a **Filters** toggle button (options icon) and a **Reset** button.
+- Clicking the toggle collapses the filter bar: in top mode the dropdowns hide and only icons remain; in sidebar mode the sidebar shrinks to a compact icon strip.
+- The collapse state persists across page loads via `localStorage`.
+- Clicking the toggle again expands the filters back.

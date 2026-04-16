@@ -1,6 +1,6 @@
 # Dynamic View Filter Plugin
 
-[![Build Status](https://ci.jenkins.io/job/Plugins/job/dynamic-view-filter-plugin/job/main/badge/icon)](https://ci.jenkins.io/job/Plugins/job/dynamic-view-filter-plugin/job/main/)
+[![Build Status](https://ci.jenkins.io/buildStatus/icon?job=Plugins%2Fdynamic-view-filter-plugin%2Fmain)](https://ci.jenkins.io/job/Plugins/job/dynamic-view-filter-plugin/job/main/)
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/dynamic-view-filter.svg)](https://plugins.jenkins.io/dynamic-view-filter)
 [![Jenkins Plugin Installs](https://img.shields.io/jenkins/plugin/i/dynamic-view-filter.svg?color=blue)](https://plugins.jenkins.io/dynamic-view-filter)
 [![Contributors](https://img.shields.io/github/contributors/jenkinsci/dynamic-view-filter-plugin.svg)](https://github.com/jenkinsci/dynamic-view-filter-plugin/graphs/contributors)
@@ -9,7 +9,7 @@ Dynamic view filters with auto-populated dropdown menus, build filter columns, a
 
 ## What does this plugin do?
 
-Imagine you have hundreds of Jenkins jobs organized in folders — different projects, platforms, and environments. Normally you'd scroll through all of them or create dozens of separate views manually.
+Imagine you have hundreds of Jenkins jobs organized in folders, different projects, platforms, and environments. Normally you'd scroll through all of them or create dozens of separate views manually.
 
 This plugin lets you:
 
@@ -17,17 +17,51 @@ This plugin lets you:
 - **Show only relevant build results in columns.** If you filter by a parameter (e.g., `region=east`), the Status, Last Success, and Last Failure columns update to reflect only matching builds — not just the latest build regardless.
 - **Works with all job types.** The upstream `BuildFilterColumn` from View Job Filters can break with Pipeline (Jenkinsfile) jobs. This plugin handles Pipeline, FreeStyle, Matrix, and any other job type reliably.
 
-In short: **dynamic dropdowns that filter both your job list and the build data shown in columns, with zero manual maintenance.**
+In short, dynamic dropdowns that filter both your job list and the build data shown in columns, with no manual maintenance.
 
 ## Screenshots
 
-### Dropdown Filter View
+### Dropdown Filter View - Top Mode
 
-Auto-populated dropdown menus at the top of the view for filtering jobs instantly.
+Filter bar at the top with horizontally arranged dropdowns, Reset button, and Filters toggle.
 
-![Dropdown Filter View](docs/images/dropdown-filter-view.png)
+![Top Mode — Expanded](docs/images/dropdown-filter-view-top-expanded.png)
 
-### Dropdown Filter Configuration
+With a filter applied (Project = `plugins`), only matching jobs are shown:
+
+![Top Mode — Filtered](docs/images/dropdown-filter-view-top-filtered.png)
+
+Collapsed state, only the toggle icon remains:
+
+![Top Mode — Collapsed](docs/images/dropdown-filter-view-top-collapsed.png)
+
+### Dropdown Filter View - Sidebar Mode
+
+Filter bar as a sidebar on the right with vertically stacked dropdowns.
+
+![Sidebar Mode — Expanded](docs/images/dropdown-filter-view-sidebar-expanded.png)
+
+With a filter applied (Project = `jenkins`), only matching jobs are shown:
+
+![Sidebar Mode — Filtered](docs/images/dropdown-filter-view-sidebar-filtered.png)
+
+Collapsed state, sidebar collapses to a compact icon strip:
+
+![Sidebar Mode — Collapsed](docs/images/dropdown-filter-view-sidebar-collapsed.png)
+
+### Configuration
+
+#### Dropdown Filters
+
+Add dropdown definitions with Job Name Regex or Build Parameter source types.
+
+![Dropdown Filters Config](docs/images/dropdown-view-config-dropdown-filters.png)
+
+#### Filter Position
+
+Choose where the filter bar appears: top or sidebar.
+
+![Filter Position Config](docs/images/dropdown-view-config-filter-position.png)
 
 #### Job Name Regex Source
 
@@ -40,6 +74,18 @@ Extract dropdown values from job folder paths using a regex capture group.
 Populate dropdown values from actual build parameter values.
 
 ![Build Parameter Filter](docs/images/dropdown-view-build-parameter-filter.png)
+
+#### Columns
+
+Configure Dynamic Build Filter Column and Parameter Build Filter Column.
+
+![Columns Config](docs/images/dropdown-view-config-columns.png)
+
+#### Job Filters
+
+Add Parameter Run Matcher Filter to the Job Filters section.
+
+![Job Filters Config](docs/images/dropdown-view-config-job-filters.png)
 
 ### Dynamic Build Filter Column
 
@@ -87,16 +133,25 @@ Multiple dropdowns combine with AND logic. All standard ListView features (colum
 
 > **Important:** The Dropdown Filter View is a ListView — it only sees jobs that match the view's **Include jobs by regex** field. You must configure a regex pattern (e.g., `.*`) and enable **Recurse in subfolders** in the view configuration for the dropdowns to discover and filter jobs. The dropdown regex/parameter filters narrow down from this base set.
 
+#### Filter Bar Position
+
+The filter bar can be positioned in two modes, configurable in the view settings:
+
+| Position | Description |
+|---|---|
+| **Top** | Horizontal bar above the job table. Dropdowns are arranged in a flex row. Sticky on scroll. |
+| **Sidebar** | Vertical panel on the right side of the job table. Dropdowns stacked vertically. Sticky on scroll. |
+
 #### Filter Bar Behavior
 
 - **Collapsible:** Click the **Filters** toggle to collapse or expand the filter bar. The state is persisted in `localStorage` — it remembers your preference across page loads.
 - **Auto-submit:** Selecting a value in any dropdown immediately applies the filter (no submit button needed).
-- **Clear All:** Resets all dropdowns to "-- All --" and resubmits, without a full page reload.
+- **Reset:** Resets all dropdowns to "-- All --" and resubmits.
 - **Only actual jobs shown:** Folder items are automatically excluded from the job table — only `Job` items (Pipeline, FreeStyle, Matrix, etc.) appear in the filtered results.
 
 Here is an example with the PROJECT dropdown set to `jenkins` — only matching jobs are shown:
 
-![Filtered View Example](docs/images/dropdown-filter-view-filtered-01.png)
+![Filtered View Example](docs/images/dropdown-filter-view-top-filtered.png)
 
 #### Regex Pattern Tips
 
@@ -168,6 +223,7 @@ Supports:
   <name>My Filtered View</name>
   <includeRegex>projects/.*/.*</includeRegex>
   <recurse>true</recurse>
+  <filterPosition>top</filterPosition>
   <dropdowns>
     <io.jenkins.plugins.dynamic_view_filter.DropdownDefinition>
       <label>Project</label>

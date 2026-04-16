@@ -13,17 +13,39 @@
         // Place bar inside .dashboard, between tab bar and table
         var tabBar = document.getElementById('projectstatus-tabBar');
         var dashboard = tabBar ? tabBar.parentNode : null;
-        if (!dashboard) return;
 
-        var desktopTable = dashboard.querySelector('.jenkins-mobile-hide');
+        // Fallback: when no jobs match, Jenkins omits the dashboard/projectstatus-tabBar.
+        // Look for the .tabBarFrame instead so the filter bar still appears.
+        if (!dashboard) {
+            var tabFrame = document.querySelector('.tabBarFrame');
+            if (!tabFrame) return;
+            var parent = tabFrame.parentNode;
 
-        if (position === 'sidebar' && desktopTable) {
-            initSidebar(bar, desktopTable, dashboard, tabBar);
+            if (position === 'sidebar') {
+                // Wrap remaining content + bar in a sidebar layout
+                var emptyContent = tabFrame.nextElementSibling;
+                var wrapper = document.createElement('div');
+                wrapper.classList.add('dvf-sidebar-wrapper');
+                parent.insertBefore(wrapper, emptyContent);
+                if (emptyContent) wrapper.appendChild(emptyContent);
+                wrapper.appendChild(bar);
+                bar.classList.remove('jenkins-hidden');
+            } else {
+                parent.insertBefore(bar, tabFrame.nextSibling);
+                bar.classList.remove('jenkins-hidden');
+                bar.classList.add('dvf-filter-bar--sticky');
+            }
         } else {
-            // Top mode: insert bar between tab bar and table, sticky on scroll
-            dashboard.insertBefore(bar, tabBar.nextSibling);
-            bar.classList.remove('jenkins-hidden');
-            bar.classList.add('dvf-filter-bar--sticky');
+            var desktopTable = dashboard.querySelector('.jenkins-mobile-hide');
+
+            if (position === 'sidebar' && desktopTable) {
+                initSidebar(bar, desktopTable, dashboard, tabBar);
+            } else {
+                // Top mode: insert bar between tab bar and table, sticky on scroll
+                dashboard.insertBefore(bar, tabBar.nextSibling);
+                bar.classList.remove('jenkins-hidden');
+                bar.classList.add('dvf-filter-bar--sticky');
+            }
         }
 
         // Restore collapse state from localStorage

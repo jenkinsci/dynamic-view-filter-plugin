@@ -87,7 +87,7 @@ mvn spotless:apply
 
 ## Pull Request Guidelines
 
-- Keep PRs focused — one logical change per PR.
+- Keep PRs focused. One logical change per PR.
 - Include tests for new functionality.
 - Ensure `mvn clean verify` passes with zero warnings from SpotBugs.
 - Update `README.md` or docs if the change affects user-facing behavior.
