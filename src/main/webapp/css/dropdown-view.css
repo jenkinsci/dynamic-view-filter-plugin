@@ -19,12 +19,8 @@
     margin-bottom: 0;
 }
 
-/* Hide Reset text when collapsed (both modes), keep icon */
-.dvf-filter-bar--collapsed .dvf-reset-label {
-    display: none;
-}
-
-/* Hide Filters text when collapsed (both modes), keep icon */
+/* Hide button text when collapsed (both modes), keep icons */
+.dvf-filter-bar--collapsed .dvf-reset-label,
 .dvf-filter-bar--collapsed .dvf-toggle-label {
     display: none;
 }
@@ -84,8 +80,9 @@
     padding: 0.5rem 1rem 1rem;
 }
 
-/* Card border via ::after (matches Jenkins l:card) */
-.dvf-filter-bar--sticky:not(.dvf-filter-bar--collapsed)::after {
+/* Card border via ::after (matches Jenkins l:card) — shared with sidebar */
+.dvf-filter-bar--sticky:not(.dvf-filter-bar--collapsed)::after,
+.dvf-sidebar-wrapper > .dvf-filter-bar::after {
     border: var(--card-border-width, 2px) solid var(--card-border-color);
     border-radius: inherit;
     content: "";
@@ -146,17 +143,6 @@
     z-index: 1;
     border-radius: 1rem;
     overflow: hidden;
-}
-
-/* Card border via ::after (matches Jenkins l:card) */
-.dvf-sidebar-wrapper > .dvf-filter-bar::after {
-    border: var(--card-border-width, 2px) solid var(--card-border-color);
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    pointer-events: none;
-    position: absolute;
-    z-index: 1;
 }
 
 /* Sidebar collapsed: no card border, just the toggle */

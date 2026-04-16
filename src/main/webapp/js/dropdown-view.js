@@ -29,7 +29,7 @@
         // Restore collapse state from localStorage
         var storageKey = 'dvf-collapsed-' + position;
         if (localStorage.getItem(storageKey) === 'true' && content && toggle) {
-            collapseContent(content, toggle, position, bar);
+            collapseContent(content, position, bar);
         }
 
         // Toggle collapse/expand
@@ -37,10 +37,10 @@
             toggle.addEventListener('click', function() {
                 var isCollapsed = bar.classList.contains('dvf-filter-bar--collapsed');
                 if (isCollapsed) {
-                    expandContent(content, toggle, position, bar);
+                    expandContent(content, position, bar);
                     localStorage.setItem(storageKey, 'false');
                 } else {
-                    collapseContent(content, toggle, position, bar);
+                    collapseContent(content, position, bar);
                     localStorage.setItem(storageKey, 'true');
                 }
             });
@@ -84,25 +84,19 @@
         bar.classList.remove('jenkins-hidden');
     }
 
-    function collapseContent(content, toggle, position, bar) {
-        if (bar) bar.classList.add('dvf-filter-bar--collapsed');
-
-        if (position === 'top') {
-            // Top mode: content hidden via CSS on dvf-filter-bar--collapsed
-        } else {
+    function collapseContent(content, position, bar) {
+        bar.classList.add('dvf-filter-bar--collapsed');
+        if (position === 'sidebar') {
             content.classList.add('jenkins-hidden');
-            if (bar) bar.classList.add('dvf-sidebar--collapsed');
+            bar.classList.add('dvf-sidebar--collapsed');
         }
     }
 
-    function expandContent(content, toggle, position, bar) {
-        if (bar) bar.classList.remove('dvf-filter-bar--collapsed');
-
-        if (position === 'top') {
-            // Top mode: content shown via CSS removing dvf-filter-bar--collapsed
-        } else {
+    function expandContent(content, position, bar) {
+        bar.classList.remove('dvf-filter-bar--collapsed');
+        if (position === 'sidebar') {
             content.classList.remove('jenkins-hidden');
-            if (bar) bar.classList.remove('dvf-sidebar--collapsed');
+            bar.classList.remove('dvf-sidebar--collapsed');
         }
     }
 

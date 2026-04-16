@@ -21,60 +21,29 @@
       </div>
       <div id="dvf-content">
         <form id="dvf-form" method="GET" action="">
-          <j:choose>
-            <j:when test="${it.filterPosition == 'sidebar'}">
-              <!-- Sidebar: vertical stacked dropdowns -->
-              <div class="dvf-sidebar-layout">
-                <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
-                  <div>
-                    <label class="jenkins-form-label">${dd.label}</label>
-                    <div class="jenkins-select">
-                      <select name="dd_${loop.index}" class="jenkins-select__input">
-                        <option value="">-- All --</option>
-                        <j:forEach var="val" items="${it.getDropdownValues(dd)}">
-                          <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
-                          <j:choose>
-                            <j:when test="${isSelected}">
-                              <option value="${val}" selected="selected">${val}</option>
-                            </j:when>
-                            <j:otherwise>
-                              <option value="${val}">${val}</option>
-                            </j:otherwise>
-                          </j:choose>
-                        </j:forEach>
-                      </select>
-                    </div>
-                  </div>
-                </j:forEach>
+          <div class="${it.filterPosition == 'sidebar' ? 'dvf-sidebar-layout' : 'dvf-top-layout'}">
+            <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
+              <div class="dvf-dropdown-item">
+                <label class="jenkins-form-label">${dd.label}</label>
+                <div class="jenkins-select">
+                  <select name="dd_${loop.index}" class="jenkins-select__input">
+                    <option value="">-- All --</option>
+                    <j:forEach var="val" items="${it.getDropdownValues(dd)}">
+                      <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
+                      <j:choose>
+                        <j:when test="${isSelected}">
+                          <option value="${val}" selected="selected">${val}</option>
+                        </j:when>
+                        <j:otherwise>
+                          <option value="${val}">${val}</option>
+                        </j:otherwise>
+                      </j:choose>
+                    </j:forEach>
+                  </select>
+                </div>
               </div>
-            </j:when>
-            <j:otherwise>
-              <!-- Top: horizontal flex row -->
-              <div class="dvf-top-layout">
-                <j:forEach var="dd" items="${it.dropdowns}" varStatus="loop">
-                  <div class="dvf-dropdown-item">
-                    <label class="jenkins-form-label">${dd.label}</label>
-                    <div class="jenkins-select">
-                      <select name="dd_${loop.index}" class="jenkins-select__input">
-                        <option value="">-- All --</option>
-                        <j:forEach var="val" items="${it.getDropdownValues(dd)}">
-                          <j:set var="isSelected" value="${val == it.getSelectedValue(loop.index)}"/>
-                          <j:choose>
-                            <j:when test="${isSelected}">
-                              <option value="${val}" selected="selected">${val}</option>
-                            </j:when>
-                            <j:otherwise>
-                              <option value="${val}">${val}</option>
-                            </j:otherwise>
-                          </j:choose>
-                        </j:forEach>
-                      </select>
-                    </div>
-                  </div>
-                </j:forEach>
-              </div>
-            </j:otherwise>
-          </j:choose>
+            </j:forEach>
+          </div>
         </form>
       </div>
     </div>
