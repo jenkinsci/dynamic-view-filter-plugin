@@ -81,11 +81,12 @@
         var clearBtn = document.getElementById('dvf-clear-all');
         if (clearBtn && form) {
             clearBtn.addEventListener('click', function() {
+                clearBtn.classList.add('dvf-spinning');
                 var selects = form.querySelectorAll('select');
                 for (var i = 0; i < selects.length; i++) {
                     selects[i].selectedIndex = 0;
                 }
-                form.submit();
+                setTimeout(function() { form.submit(); }, 500);
             });
         }
     }

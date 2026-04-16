@@ -25,6 +25,25 @@
     display: none;
 }
 
+/* Animate filter icon: rotated when collapsed, full rotation when expanded */
+#dvf-toggle svg {
+    transition: transform 0.5s ease;
+    transform: rotate(360deg);
+}
+
+.dvf-filter-bar--collapsed #dvf-toggle svg {
+    transform: rotate(270deg);
+}
+
+/* Animate reset icon: spin on click */
+#dvf-clear-all svg {
+    transition: transform 0.5s ease;
+}
+
+#dvf-clear-all.dvf-spinning svg {
+    transform: rotate(90deg);
+}
+
 /* ===== TOP MODE ===== */
 
 /* Top mode: bar is flex — content left, toggle-row top-right */
