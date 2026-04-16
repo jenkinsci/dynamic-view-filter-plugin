@@ -8,6 +8,9 @@ This document describes how to build, test, and package the Dynamic View Filter 
 dynamic-view-filter-plugin/
 ├── pom.xml                          # Maven project descriptor
 ├── Jenkinsfile                      # CI pipeline definition
+├── LICENSE
+├── README.md
+├── CONTRIBUTING.md
 ├── src/
 │   ├── main/
 │   │   ├── java/io/jenkins/plugins/dynamic_view_filter/
@@ -18,36 +21,54 @@ dynamic-view-filter-plugin/
 │   │   │   ├── DropdownDefinition.java          # Single dropdown configuration
 │   │   │   ├── FilteredJob.java                 # Shared Job wrapper with predicate-based filtering
 │   │   │   └── ParameterUtils.java              # Shared parameter extraction utilities
-│   │   └── resources/io/jenkins/plugins/dynamic_view_filter/
-│   │       ├── DynamicBuildFilterColumn/
-│   │       │   ├── config.jelly                 # Column configuration UI
-│   │       │   └── column.jelly                 # Column rendering
-│   │       ├── ParameterBuildFilterColumn/
-│   │       │   ├── config.jelly
-│   │       │   └── column.jelly
-│   │       ├── ParameterRunMatcherFilter/
-│   │       │   └── config.jelly
-│   │       ├── DropdownFilterView/
-│   │       │   ├── main.jelly                   # View rendering with dropdowns
-│   │       │   ├── configure-entries.jelly       # View configuration form
-│   │       │   └── index.jelly
-│   │       ├── DropdownDefinition/
-│   │       │   └── config.jelly
-│   │       └── Messages.properties              # Display name strings
+│   │   └── resources/
+│   │       ├── index.jelly                      # Plugin description for Jenkins UI
+│   │       └── io/jenkins/plugins/dynamic_view_filter/
+│   │           ├── DynamicBuildFilterColumn/
+│   │           │   ├── config.jelly             # Column configuration UI
+│   │           │   ├── column.jelly             # Column rendering
+│   │           │   ├── columnHeader.jelly        # Column header rendering
+│   │           │   └── index.jelly              # Extension point description
+│   │           ├── ParameterBuildFilterColumn/
+│   │           │   ├── config.jelly
+│   │           │   ├── column.jelly
+│   │           │   ├── columnHeader.jelly
+│   │           │   └── index.jelly              # Extension point description
+│   │           ├── ParameterRunMatcherFilter/
+│   │           │   ├── config.jelly
+│   │           │   └── index.jelly              # Extension point description
+│   │           ├── DropdownFilterView/
+│   │           │   ├── main.jelly               # View rendering with dropdowns
+│   │           │   ├── view.js                  # CSP-compliant external JS for filter bar
+│   │           │   ├── configure-entries.jelly   # View configuration form
+│   │           │   └── newViewDetail.jelly       # Create View dialog description
+│   │           ├── DropdownDefinition/
+│   │           │   ├── config.jelly             # Dropdown source type config
+│   │           │   └── config.js                # CSP-compliant external JS for field toggling
+│   │           └── Messages.properties          # Display name strings
 │   └── test/java/io/jenkins/plugins/dynamic_view_filter/
 │       ├── DynamicBuildFilterColumnTest.java     # 10 tests
-│       ├── DropdownFilterViewTest.java           # 8 tests
-│       └── InjectedTest.java                    # Auto-generated injection tests
+│       └── DropdownFilterViewTest.java           # 8 tests
 ├── .github/
-│   ├── workflows/
-│   │   ├── cd.yaml                              # Continuous delivery
-│   │   └── jenkins-security-scan.yml            # Security scanning
-│   └── CODEOWNERS
+│   ├── dependabot.yml                           # Automated dependency updates
+│   ├── CODEOWNERS
+│   └── workflows/
+│       ├── cd.yaml                              # Continuous delivery
+│       └── jenkins-security-scan.yml            # Security scanning
 ├── .mvn/
 │   ├── extensions.xml                           # git-changelist-maven-extension
 │   └── maven.config                             # Default Maven flags
 └── docs/
-    └── USAGE_SCENARIOS.md                       # Detailed usage scenarios
+    ├── BUILD.md                                 # This file
+    ├── USAGE_SCENARIOS.md                       # Detailed usage scenarios
+    └── images/                                  # Screenshots for README
+        ├── dropdown-filter-view.png
+        ├── dropdown-filter-view-filtered-01.png
+        ├── dropdown-view-build-parameter-filter.png
+        ├── dropdown-view-job-name-regex-filter.png
+        ├── dynamic-build-filter-column.png
+        ├── parameter-build-filter-column.png
+        └── parameter-run-matcher-filter.png
 ```
 
 ## Requirements
@@ -70,7 +91,7 @@ mvn clean verify
 
 This runs:
 1. **compile** — Compiles Java sources
-2. **test** — Runs 33 unit/integration tests via Jenkins Test Harness
+2. **test** — Runs 36 unit/integration tests via Jenkins Test Harness
 3. **spotbugs:check** — Static analysis for common bug patterns
 4. **spotless:check** — Code formatting validation
 5. **package** — Produces `target/dynamic-view-filter.hpi`
