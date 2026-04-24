@@ -2,18 +2,23 @@ package io.jenkins.plugins.dynamic_view_filter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import hudson.model.BooleanParameterValue;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.ParametersAction;
 import hudson.model.ParametersDefinitionProperty;
 import hudson.model.ChoiceParameterDefinition;
+import hudson.model.Run;
 import hudson.model.StringParameterValue;
 import hudson.model.TopLevelItem;
 import hudson.model.queue.QueueTaskFuture;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -149,5 +154,112 @@ public class DropdownFilterViewTest {
         List<String> values = dd.extractAllValues(job);
         assertEquals(0, values.size());
         assertFalse("should not match with no builds", dd.matches(job, "east"));
+    }
+
+    // ---- DropdownFilterView property tests ----
+
+    @Test
+    public void filterPositionDefaultsToTop() throws Exception {
+        DropdownFilterView view = new DropdownFilterView("fp-test", j.jenkins);
+        assertEquals("top", view.getFilterPosition());
+
+        view.setFilterPosition("sidebar");
+        assertEquals("sidebar", view.getFilterPosition());
+
+        view.setFilterPosition(null);
+        assertEquals("top", view.getFilterPosition());
+    }
+
+    @Test
+    public void getSelectedValueReturnsEmptyOutsideRequest() throws Exception {
+        DropdownFilterView view = new DropdownFilterView("sel-test", j.jenkins);
+        assertEquals("", view.getSelectedValue(0));
+        assertEquals("", view.getSelectedValue(1));
+    }
+
+    @Test
+    public void getActiveRunMatchersEmptyWithoutRequest() throws Exception {
+        DropdownFilterView view = new DropdownFilterView("matcher-test", j.jenkins);
+        j.jenkins.addView(view);
+
+        DropdownDefinition dd = new DropdownDefinition("Region", "buildParameter", "", "region");
+        view.setDropdowns(Arrays.asList(dd));
+
+        List<hudson.views.RunMatcher> matchers = view.getActiveRunMatchers();
+        assertTrue("no matchers without request", matchers.isEmpty());
+    }
+
+    @Test
+    public void getItemsWithDropdownsFiltersNonJobItems() throws Exception {
+        FreeStyleProject job = j.createFreeStyleProject("dropdown-job");
+
+        DropdownFilterView view = new DropdownFilterView("items-test", j.jenkins);
+        j.jenkins.addView(view);
+        view.add(job);
+
+        DropdownDefinition dd = new DropdownDefinition("Name", "jobNameRegex", "(.+)", "");
+        view.setDropdowns(Arrays.asList(dd));
+
+        List<TopLevelItem> items = view.getItems();
+        assertEquals(1, items.size());
+    }
+
+    // ---- DropdownRunMatcher tests ----
+
+    @Test
+    public void dropdownRunMatcherMatchesBuild() throws Exception {
+        FreeStyleProject job = j.createFreeStyleProject("drm-job");
+        job.addProperty(new ParametersDefinitionProperty(
+                new ChoiceParameterDefinition("region", new String[]{"east", "west"}, "region")));
+
+        FreeStyleBuild eastBuild = buildWithParam(job, "region", "east");
+        FreeStyleBuild westBuild = buildWithParam(job, "region", "west");
+
+        DropdownFilterView.DropdownRunMatcher matcher =
+                new DropdownFilterView.DropdownRunMatcher("region", "east");
+
+        assertTrue("east build should match", matcher.matchesRun(eastBuild));
+        assertFalse("west build should not match", matcher.matchesRun(westBuild));
+        assertFalse("null run should not match", matcher.matchesRun(null));
+    }
+
+    // ---- ParameterUtils tests ----
+
+    @Test
+    public void parameterUtilsToPatternHandlesNullAndEmpty() {
+        assertNull("null regex returns null", ParameterUtils.toPattern(null));
+        assertNull("empty regex returns null", ParameterUtils.toPattern(""));
+        Pattern p = ParameterUtils.toPattern("abc");
+        assertNotNull("non-empty regex returns pattern", p);
+        assertEquals("abc", p.pattern());
+    }
+
+    @Test
+    public void parameterUtilsMatchesPatternEdgeCases() {
+        assertFalse("null match string returns false", ParameterUtils.matchesPattern(Pattern.compile(".*"), null));
+        assertTrue("null pattern matches anything", ParameterUtils.matchesPattern(null, "anything"));
+        assertTrue("matching pattern returns true", ParameterUtils.matchesPattern(Pattern.compile("abc"), "abc"));
+        assertFalse("non-matching pattern returns false", ParameterUtils.matchesPattern(Pattern.compile("abc"), "xyz"));
+    }
+
+    @Test
+    public void parameterUtilsGetStringValueHandlesTypes() throws Exception {
+        StringParameterValue spv = new StringParameterValue("name", "hello");
+        assertEquals("hello", ParameterUtils.getStringValue(spv));
+
+        BooleanParameterValue bpv = new BooleanParameterValue("flag", true);
+        assertEquals("true", ParameterUtils.getStringValue(bpv));
+    }
+
+    @Test
+    public void parameterUtilsGetParamValueReturnsNullForMissingParam() throws Exception {
+        FreeStyleProject job = j.createFreeStyleProject("param-util-job");
+        job.addProperty(new ParametersDefinitionProperty(
+                new ChoiceParameterDefinition("region", new String[]{"east"}, "region")));
+
+        FreeStyleBuild build = buildWithParam(job, "region", "east");
+
+        assertEquals("east", ParameterUtils.getParamValue(build, "region"));
+        assertNull("missing param returns null", ParameterUtils.getParamValue(build, "nonexistent"));
     }
 }
