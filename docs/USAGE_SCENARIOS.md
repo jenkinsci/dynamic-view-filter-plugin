@@ -274,3 +274,81 @@ You have a dashboard view on a wall-mounted monitor. Most of the time, users jus
 - Clicking the toggle collapses the filter bar: in top mode the dropdowns hide and only icons remain; in sidebar mode the sidebar shrinks to a compact icon strip.
 - The collapse state persists across page loads via `localStorage`.
 - Clicking the toggle again expands the filters back.
+
+---
+
+## XML / Job DSL Examples
+
+These examples show the raw XML configuration for each component. Use them with Jenkins Configuration as Code (JCasC), Job DSL, or direct config.xml editing.
+
+### Dynamic Build Filter Column
+
+Wraps a delegate column with view-level RunMatcher filtering:
+
+```xml
+<columns>
+  <io.jenkins.plugins.dynamic__view__filter.DynamicBuildFilterColumn>
+    <delegate class="hudson.views.StatusColumn"/>
+  </io.jenkins.plugins.dynamic__view__filter.DynamicBuildFilterColumn>
+</columns>
+```
+
+### Parameter Build Filter Column
+
+Self-contained per-column parameter filtering:
+
+```xml
+<columns>
+  <io.jenkins.plugins.dynamic__view__filter.ParameterBuildFilterColumn>
+    <delegate class="hudson.views.LastSuccessColumn"/>
+    <paramName>region</paramName>
+    <paramValueRegex>east</paramValueRegex>
+  </io.jenkins.plugins.dynamic__view__filter.ParameterBuildFilterColumn>
+</columns>
+```
+
+### Dropdown Filter View
+
+View with auto-populated dropdown filters:
+
+```xml
+<io.jenkins.plugins.dynamic__view__filter.DropdownFilterView>
+  <name>My Filtered View</name>
+  <includeRegex>projects/.*/.*</includeRegex>
+  <recurse>true</recurse>
+  <filterPosition>top</filterPosition>
+  <dropdowns>
+    <io.jenkins.plugins.dynamic__view__filter.DropdownDefinition>
+      <label>Project</label>
+      <sourceType>jobNameRegex</sourceType>
+      <jobNamePattern>projects/([^/]+)/.*</jobNamePattern>
+      <parameterName/>
+    </io.jenkins.plugins.dynamic__view__filter.DropdownDefinition>
+    <io.jenkins.plugins.dynamic__view__filter.DropdownDefinition>
+      <label>Environment</label>
+      <sourceType>buildParameter</sourceType>
+      <jobNamePattern/>
+      <parameterName>env</parameterName>
+    </io.jenkins.plugins.dynamic__view__filter.DropdownDefinition>
+  </dropdowns>
+</io.jenkins.plugins.dynamic__view__filter.DropdownFilterView>
+```
+
+### Parameter Run Matcher Filter
+
+```xml
+<jobFilters>
+  <io.jenkins.plugins.dynamic__view__filter.ParameterRunMatcherFilter>
+    <includeExcludeTypeString>includeMatched</includeExcludeTypeString>
+    <nameRegex>region</nameRegex>
+    <valueRegex>east</valueRegex>
+    <descriptionRegex/>
+    <useDefaultValue>false</useDefaultValue>
+    <matchAllBuilds>true</matchAllBuilds>
+    <maxBuildsToMatch>0</maxBuildsToMatch>
+    <matchBuildsInProgress>false</matchBuildsInProgress>
+  </io.jenkins.plugins.dynamic__view__filter.ParameterRunMatcherFilter>
+</jobFilters>
+```
+
+> **Note:** In XStream XML, the package `dynamic_view_filter` is serialized with double underscores as `dynamic__view__filter`.
