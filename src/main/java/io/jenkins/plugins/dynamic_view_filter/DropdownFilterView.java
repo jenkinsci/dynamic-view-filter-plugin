@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import jakarta.servlet.ServletException;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.Stapler;
 import org.kohsuke.stapler.StaplerRequest2;
 
@@ -53,6 +54,7 @@ public class DropdownFilterView extends ListView {
         return dropdowns != null ? dropdowns : new ArrayList<>();
     }
 
+    @DataBoundSetter
     public void setDropdowns(List<DropdownDefinition> dropdowns) {
         this.dropdowns = dropdowns;
     }
@@ -61,6 +63,7 @@ public class DropdownFilterView extends ListView {
         return filterPosition != null ? filterPosition : "top";
     }
 
+    @DataBoundSetter
     public void setFilterPosition(String filterPosition) {
         this.filterPosition = filterPosition;
     }
