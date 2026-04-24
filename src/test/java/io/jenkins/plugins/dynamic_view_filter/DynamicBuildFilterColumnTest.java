@@ -182,8 +182,10 @@ public class DynamicBuildFilterColumnTest {
         ListView view = new ListView("test-rmf", j.jenkins);
         j.jenkins.addView(view);
         // nameRegex matches "region", value matches "east", scan all builds
-        view.getJobFilters().add(new ParameterRunMatcherFilter(
-                "includeMatched", "reg.*", "east", "", false, true, 0, true));
+        ParameterRunMatcherFilter rmf1 = new ParameterRunMatcherFilter("includeMatched");
+        rmf1.setNameRegex("reg.*");
+        rmf1.setValueRegex("east");
+        view.getJobFilters().add(rmf1);
 
         DynamicBuildFilterColumn column = new DynamicBuildFilterColumn(new LastSuccessColumn());
         setContextView(column, view);
@@ -260,8 +262,10 @@ public class DynamicBuildFilterColumnTest {
         ListView view = new ListView("rmf-test", j.jenkins);
         j.jenkins.addView(view);
         // RunMatcher matches region=east; column only shows matching builds
-        view.getJobFilters().add(new ParameterRunMatcherFilter(
-                "includeMatched", "region", "east", "", false, true, 0, true));
+        ParameterRunMatcherFilter rmf2 = new ParameterRunMatcherFilter("includeMatched");
+        rmf2.setNameRegex("region");
+        rmf2.setValueRegex("east");
+        view.getJobFilters().add(rmf2);
 
         DynamicBuildFilterColumn column = new DynamicBuildFilterColumn(new LastSuccessColumn());
         setContextView(column, view);

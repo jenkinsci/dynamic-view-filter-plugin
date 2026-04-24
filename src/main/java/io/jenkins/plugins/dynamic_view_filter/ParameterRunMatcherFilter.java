@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 
 /**
  * A view-level job filter that implements {@link RunMatcher}.
@@ -57,27 +58,9 @@ public class ParameterRunMatcherFilter extends ViewJobFilter implements RunMatch
     private int maxBuildsToMatch;
 
     @DataBoundConstructor
-    public ParameterRunMatcherFilter(
-            String includeExcludeTypeString,
-            String nameRegex,
-            String valueRegex,
-            String descriptionRegex,
-            boolean useDefaultValue,
-            boolean matchAllBuilds,
-            int maxBuildsToMatch,
-            boolean matchBuildsInProgress) {
+    public ParameterRunMatcherFilter(String includeExcludeTypeString) {
         this.includeExcludeTypeString = includeExcludeTypeString;
         this.includeExcludeType = IncludeExcludeType.valueOf(includeExcludeTypeString);
-        this.nameRegex = nameRegex;
-        this.valueRegex = valueRegex;
-        this.descriptionRegex = descriptionRegex;
-        this.namePattern = ParameterUtils.toPattern(nameRegex);
-        this.valuePattern = ParameterUtils.toPattern(valueRegex);
-        this.descriptionPattern = ParameterUtils.toPattern(descriptionRegex);
-        this.useDefaultValue = useDefaultValue;
-        this.matchAllBuilds = matchAllBuilds;
-        this.maxBuildsToMatch = maxBuildsToMatch;
-        this.matchBuildsInProgress = matchBuildsInProgress;
     }
 
     Object readResolve() {
@@ -125,28 +108,66 @@ public class ParameterRunMatcherFilter extends ViewJobFilter implements RunMatch
         return nameRegex;
     }
 
+    @DataBoundSetter
+    public void setNameRegex(String nameRegex) {
+        this.nameRegex = nameRegex;
+        this.namePattern = ParameterUtils.toPattern(nameRegex);
+    }
+
     public String getValueRegex() {
         return valueRegex;
+    }
+
+    @DataBoundSetter
+    public void setValueRegex(String valueRegex) {
+        this.valueRegex = valueRegex;
+        this.valuePattern = ParameterUtils.toPattern(valueRegex);
     }
 
     public String getDescriptionRegex() {
         return descriptionRegex;
     }
 
+    @DataBoundSetter
+    public void setDescriptionRegex(String descriptionRegex) {
+        this.descriptionRegex = descriptionRegex;
+        this.descriptionPattern = ParameterUtils.toPattern(descriptionRegex);
+    }
+
     public boolean isUseDefaultValue() {
         return useDefaultValue;
+    }
+
+    @DataBoundSetter
+    public void setUseDefaultValue(boolean useDefaultValue) {
+        this.useDefaultValue = useDefaultValue;
     }
 
     public boolean isMatchAllBuilds() {
         return matchAllBuilds;
     }
 
+    @DataBoundSetter
+    public void setMatchAllBuilds(boolean matchAllBuilds) {
+        this.matchAllBuilds = matchAllBuilds;
+    }
+
     public int getMaxBuildsToMatch() {
         return maxBuildsToMatch;
     }
 
+    @DataBoundSetter
+    public void setMaxBuildsToMatch(int maxBuildsToMatch) {
+        this.maxBuildsToMatch = maxBuildsToMatch;
+    }
+
     public boolean isMatchBuildsInProgress() {
         return matchBuildsInProgress;
+    }
+
+    @DataBoundSetter
+    public void setMatchBuildsInProgress(boolean matchBuildsInProgress) {
+        this.matchBuildsInProgress = matchBuildsInProgress;
     }
 
     // ---- RunMatcher implementation (used by DynamicBuildFilterColumn) ----
